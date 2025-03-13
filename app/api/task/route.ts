@@ -6,11 +6,11 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { title, description } = await req.json();
-
+    const { title, description, column } = await req.json();
+    console.log("received data",  title, description, column );
     const { data, error } = await supabase
       .from('tasks')
-      .insert([{ title, description }]);
+      .insert([{ title, description, column }]);
 
     if (error) throw error;
 
@@ -19,6 +19,36 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, message: (error as Error).message }, { status: 500 });
   }
 }
+
+export async function PUT(req: Request) {
+    try {
+      const { id, title, description, column } = await req.json();  
+  
+    
+      const updateData: {id: string, title?:string, description?:string, column?:string } = {id};  
+ 
+      if (title) updateData.title = title;  
+      if (description) updateData.description = description;   
+      if (column) updateData.column = column;   
+  
+      if (Object.keys(updateData).length === 0) {
+        return NextResponse.json({ success: false, message: 'No valid fields to update' }, { status: 400 });
+      }
+  
+   
+      const { data, error } = await supabase
+        .from('tasks')
+        .update(updateData)  // Update only the fields that were provided
+        .eq('id', id);  // Filter by task ID
+  
+      if (error) throw error;
+  
+      return NextResponse.json({ success: true, data }, { status: 200 });
+  
+    } catch (error) {
+      return NextResponse.json({ success: false, message: (error as Error).message }, { status: 500 });
+    }
+  }
 
 export async function DELETE(req: Request) {
     try {
