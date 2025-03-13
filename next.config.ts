@@ -6,7 +6,7 @@ const getValue = () => {
     'https://momo-board.netlify.app',
     '*'
   ];
-  return "*"
+  return "https://momo-board.netlify.app"
 };
 const nextConfig: NextConfig = {
   /* config options here */
