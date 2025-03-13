@@ -20,6 +20,30 @@ export async function POST(req: Request) {
   }
 }
 
+export async function DELETE(req: Request) {
+    try {
+      const { id } = await req.json();  // Extract 'id' from the request body
+  
+      // Ensure 'id' exists in the request body
+      if (!id) {
+        return NextResponse.json({ success: false, message: 'ID is required' }, { status: 400 });
+      }
+  
+      // Delete the task from the 'tasks' table using the 'id'
+      const { data, error } = await supabase
+        .from('tasks')
+        .delete()
+        .eq('id', id);  // Use .eq() to match the 'id' field with the provided 'id'
+  
+      if (error) throw error;  // Throw error if the deletion fails
+  
+      return NextResponse.json({ success: true, data }, { status: 200 });  // Return the success response
+    } catch (error) {
+      return NextResponse.json({ success: false, message: (error as Error).message }, { status: 500 });  // Return error response
+    }
+  }
+  
+
 
  
 
