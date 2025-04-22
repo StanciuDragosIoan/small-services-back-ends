@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 const allowedOrigins = [
   "https://momo-board.netlify.app",
+  "https://some-app123.netlify.app",
   "http://localhost:5500",
+  "http://localhost:3000",
+  ,
 ];
 
 export function middleware(req: NextRequest) {
@@ -12,12 +15,21 @@ export function middleware(req: NextRequest) {
   if (origin && allowedOrigins.includes(origin)) {
     res.headers.set("Access-Control-Allow-Origin", origin);
   } else {
-    res.headers.set("Access-Control-Allow-Origin", "https://momo-board.netlify.app"); // Default fallback
+    res.headers.set(
+      "Access-Control-Allow-Origin",
+      "https://momo-board.netlify.app"
+    ); // Default fallback
   }
 
   res.headers.set("Access-Control-Allow-Credentials", "true");
-  res.headers.set("Access-Control-Allow-Methods", "GET,OPTIONS,PATCH,DELETE,POST,PUT");
-  res.headers.set("Access-Control-Allow-Headers", "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version");
+  res.headers.set(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  );
+  res.headers.set(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
 
   // Handle preflight requests (OPTIONS method)
   if (req.method === "OPTIONS") {
